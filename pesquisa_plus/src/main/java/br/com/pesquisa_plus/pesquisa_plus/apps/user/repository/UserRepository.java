@@ -21,4 +21,6 @@ public interface UserRepository extends BaseJpaRepository<UserModel, Integer> {
     // Recovering the user according to CPF
     Optional<UserModel> findByCpfUser(String cpf);
     
+    Optional<UserModel> findById(Long id);
+    
 }

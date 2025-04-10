@@ -3,6 +3,7 @@ package br.com.pesquisa_plus.pesquisa_plus.core.mail.service;
 // Imports
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class EmailService {
             mimeMessage.setSubject("Bem Vindo ao Pesquisa Plus!");
 
             String template = loadTemplate();
-            template = template.replace("{{message}}", message).replace("{{user}}", user.getNameUser());
+            template = template.replace("{{message}}", message).replace("{{user}}", user.getNameUser()).replace("{{year}}",  "" + LocalDate.now().getYear());
 
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             helper.setText(template, true);
