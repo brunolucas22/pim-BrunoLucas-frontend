@@ -10,57 +10,139 @@ import lombok.Setter;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 // Annotations for the model
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
+@Component
 // Class model for the User entity
-public class UserModel implements UserDetails {
+public class UserModel implements UserDetails, Cloneable, Serializable {
 
     // ID of User ( Primary Key )
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // Name of User
     @Column(name = "name_user", length = 255, nullable = false, unique = false)
     @JsonProperty("name_user")
-    private String name;
+    private String nameUser;
 
     // Email of User
     @Column(name = "email_user", length = 255, nullable = false, unique = true)
     @JsonProperty("email_user")
-    private String email;
+    private String emailUser;
 
     // CPF of User
     @Column(name = "cpf_user", length = 14, nullable = false, unique = true)
     @JsonProperty("cpf_user")
-    private String cpf;
+    private String cpfUser;
 
     // Phone of User
     @Column(name = "phone_user", length = 15, nullable = false, unique = false)
     @JsonProperty("phone_user")
-    private String phone;
+    private String phoneUser;
 
     // Password of User
     @Column(name = "password_user", length = 255, nullable = false, unique = false)
     @JsonProperty("password_user")
-    private String password;
+    private String passwordUser;
 
     // Photo of User
     @Column(name = "photo_user", nullable = true, unique = false)
     @JsonProperty("photo_user")
-    private String photo;
+    private String photoUser;
 
     // Type of User
     @Column(name = "type_user", nullable = false, unique = false)
     @JsonProperty("type_user")
-    private Integer type;
+    private Integer typeUser;
+
+    @Column(name = "status_user", nullable = false, unique = false)
+    @JsonProperty("status_user")
+    private Integer statusUser;
+    
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+	public String getNameUser() {
+		return nameUser;
+	}
+
+	public void setNameUser(String nameUser) {
+		this.nameUser = nameUser;
+	}
+
+	public String getEmailUser() {
+		return emailUser;
+	}
+
+	public void setEmailUser(String emailUser) {
+		this.emailUser = emailUser;
+	}
+	
+	public String getCpfUser() {
+		return cpfUser;
+	}
+
+	public void setCpfUser(String cpfUser) {
+		this.cpfUser = cpfUser;
+	}
+	
+	public String getPhoneUser() {
+		return phoneUser;
+	}
+
+	public void setPhoneUser(String phoneUser) {
+		this.phoneUser = phoneUser;
+	}
+	
+	public String getPasswordUser() {
+		return passwordUser;
+	}
+
+	public void setPasswordUser(String passwordUser) {
+		this.passwordUser = passwordUser;
+	}
+	
+	public String getPhotoUser() {
+		return photoUser;
+	}
+
+	public void setPhotoUser(String photoUser) {
+		this.photoUser = photoUser;
+	}
+	
+	public Integer getTypeUser() {
+		return typeUser;
+	}
+
+	public void setTypeUser(Integer typeUser) {
+		this.typeUser = typeUser;
+	}
+	
+	public Integer getStatusUser() {
+		return statusUser;
+	}
+
+	public void setStatusUser(Integer statusUser) {
+		this.statusUser = statusUser;
+	}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -73,7 +155,7 @@ public class UserModel implements UserDetails {
     public String getUsername() {
         // This method returns the username used to authenticate the user.
         // Here, it returns the email address of the user.
-        return email;
+        return emailUser;
     }
 
     @Override
@@ -108,7 +190,25 @@ public class UserModel implements UserDetails {
     public String getPassword() {
         // This method returns the password used to authenticate the user.
         // Here, it returns the user's password.
-        return password;
+        return passwordUser;
     }
 
+    @Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj)
+			return true;
+	    if (obj == null)
+			return false;
+	    if (getClass() != obj.getClass())
+			return false;
+	    UserModel other = (UserModel) obj;
+	    if (id != other.id)
+			return false;
+	    return true;
+	}
 }

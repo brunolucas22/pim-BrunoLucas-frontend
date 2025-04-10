@@ -5,7 +5,7 @@ package br.com.pesquisa_plus.pesquisa_plus.core.authentication.service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,14 +26,14 @@ public class TokenService {
     private String secret = "spring-acessif-token";
 
     @Autowired
-    private UserRepository UserRepository;
+    private UserRepository userRepository;
     
     public String generateToken(UserModel user, Integer exp) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             String token = JWT.create()
                                 .withIssuer("auth-api")
-                                .withSubject(user.getEmail())
+                                .withSubject(user.getEmailUser())
                                 .withExpiresAt(generateExpirationDate(exp))
                                 .sign(algorithm);
             return token;
@@ -44,7 +44,8 @@ public class TokenService {
 
     public UserModel generateRefreshToken(String refresh) {
         String login = validadeToken(refresh);
-        UserModel usuario = UserRepository.findByEmail(login);
+        UserModel usuario = userRepository.findByEmailUser(login);
+        
         return usuario;
     }
 
