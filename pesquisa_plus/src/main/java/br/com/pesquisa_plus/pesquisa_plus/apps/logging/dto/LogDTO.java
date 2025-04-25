@@ -33,6 +33,7 @@ public class LogDTO {
     private String controller;
     private Long idProject;
     private String user;
+    private String userCpf;
 }
 
 

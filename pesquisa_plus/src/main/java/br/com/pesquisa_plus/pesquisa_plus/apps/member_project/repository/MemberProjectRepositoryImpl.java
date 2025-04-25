@@ -51,7 +51,7 @@ public class MemberProjectRepositoryImpl implements MemberProjectCustomRepositor
 		        "scholarshipMemberProject", "m.scholarshipMemberProject",
 		        "permissionsMemberProject", "m.permissionsMemberProject",
 		        "idSupervisor", "m.idSupervisor",
-		        "user", "u.name"
+		        "user", "u.nameUser"
 		    );
 
 		    Session session = (Session) entityManager.getDelegate();
@@ -60,7 +60,7 @@ public class MemberProjectRepositoryImpl implements MemberProjectCustomRepositor
 
 		    select.append("""
 		        SELECT m.id AS id, m.roleMemberProject AS roleMemberProject, m.permissionsMemberProject AS permissionsMemberProject, m.scholarshipMemberProject AS scholarshipMemberProject, m.idSupervisor AS idSupervisor,
-		        u.name AS userName
+		        u.nameUser AS userName, u.photoUser AS photoUser, u.id AS idUser
 		    """);
 
 		    from.append("""
@@ -80,13 +80,17 @@ public class MemberProjectRepositoryImpl implements MemberProjectCustomRepositor
 		        String direction = order.getDirection().name();
 
 		        if (property.equals("user")) {
-		            orderBy.append(" ORDER BY u.name ").append(direction); 
+		            orderBy.append(" ORDER BY u.nameUser ").append(direction); 
 		        } else {
 		        	 orderBy.append(" ORDER BY ").append(pageable.getSort().toString().replaceAll(":", ""));
 		        }
 		    } else {
 		    	 orderBy.append(" ORDER BY ").append(pageable.getSort().toString().replaceAll(":", ""));
 		    }
+		    
+		    
+		    
+		    
 		    
 		    Query query = session.createQuery(sqlCount.append(from).append(innerJoin).append(where).toString(), Long.class);
 
@@ -105,6 +109,8 @@ public class MemberProjectRepositoryImpl implements MemberProjectCustomRepositor
 			        dto.setScholarshipMemberProject((BigDecimal) tuples[3]);
 			        dto.setIdSupervisor((Long) tuples[4]);
 			        dto.setUser(tuples[5] != null ? (String) tuples[5] : "");
+			        dto.setHavePhoto(tuples[6] != null ? true : false);			        
+			        dto.setIdUser(tuples[7] != null ? (Long) tuples[7] : null);
 			        return dto;
 			});
 

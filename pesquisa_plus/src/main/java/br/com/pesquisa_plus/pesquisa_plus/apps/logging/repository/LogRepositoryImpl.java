@@ -38,7 +38,7 @@ public class LogRepositoryImpl implements LogCustomRepository {
 	private Page<LogDTO> listTable(Specification<LogModel> spec, Pageable pageable) {
 		
 		
-		 StringBuilder select = new StringBuilder();
+		 	StringBuilder select = new StringBuilder();
 		    StringBuilder from = new StringBuilder();
 		    StringBuilder innerJoin = new StringBuilder();
 		    StringBuilder where = new StringBuilder();
@@ -47,13 +47,13 @@ public class LogRepositoryImpl implements LogCustomRepository {
 
 		    Map<String, String> parseMap = Map.of(
 		        "id", "l.id",
-		        "action", "l.action",
+		        "action", "CAST(l.action AS STRING)",
 		        "dateTime", "CAST(l.dateTime AS STRING)",
 		        "details", "l.details",
 		        "controller", "l.controller",
-		        "idUser", "l.idUser",
-		        "idProject", "CAST(l.idProject AS INTEGER)",
-		        "user", "u.name"
+		        "idUser", "CAST(l.idUser AS INTEGER)",
+		        "idProject", "CAST(l.idProject AS INTEGER)"
+		        
 		    );
 
 		    Session session = (Session) entityManager.getDelegate();
@@ -62,7 +62,7 @@ public class LogRepositoryImpl implements LogCustomRepository {
 
 		    select.append("""
 		        SELECT l.id AS id, l.action AS action, l.details AS details, l.dateTime AS dateTime, l.idUser AS idUser,
-		        l.controller AS controller, l.idProject AS idProject, u.name AS userName, u.email AS userEmail
+		        l.controller AS controller, l.idProject AS idProject, u.nameUser AS userName, u.emailUser AS userEmail,  u.cpfUser AS userCpf
 		    """);
 
 		    from.append("""
@@ -82,7 +82,7 @@ public class LogRepositoryImpl implements LogCustomRepository {
 		        String direction = order.getDirection().name();
 
 		        if (property.equals("user")) {
-		            orderBy.append(" ORDER BY u.name ").append(direction); // Ordena por userName
+		            orderBy.append(" ORDER BY u.nameUser ").append(direction); // Ordena por userName
 		        } else {
 		        	 orderBy.append(" ORDER BY ").append(pageable.getSort().toString().replaceAll(":", ""));
 		        }
@@ -113,6 +113,7 @@ public class LogRepositoryImpl implements LogCustomRepository {
 			        dto.setController((String) tuples[5]);
 			        dto.setIdProject((tuples[6] != null) ? Long.parseLong(tuples[6].toString()) : null);
 			        dto.setUser((tuples[7] != null ? (String) tuples[7] : "") + (tuples[8] != null ? " ("+ (String) tuples[8]+")" : ""));
+			        dto.setUserCpf((String) tuples[9]);
 			        return dto;
 			});
 
