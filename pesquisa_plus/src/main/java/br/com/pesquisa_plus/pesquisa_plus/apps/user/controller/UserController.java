@@ -56,5 +56,13 @@ public class UserController extends AbstractController<UserModel, UserDTO, Integ
 		}
 		return null;
 	}
+	
+	@GetMapping("/{cpf}")
+	public ResponseEntity<UserDTO> getUserByCPF(@PathVariable String cpf) throws IOException {
+	    
+		return ResponseEntity.ok( userService.selectedByCPF(cpf));
+		
+	
+	}
 
 }

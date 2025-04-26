@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
+
+import br.com.pesquisa_plus.pesquisa_plus.apps.user.dto.UserDTO;
 import br.com.pesquisa_plus.pesquisa_plus.apps.user.models.UserModel;
 import br.com.pesquisa_plus.pesquisa_plus.shared.repository.BaseJpaRepository;
 

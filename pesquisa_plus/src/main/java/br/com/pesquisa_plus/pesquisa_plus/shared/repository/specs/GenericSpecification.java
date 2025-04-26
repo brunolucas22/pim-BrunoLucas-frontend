@@ -148,12 +148,14 @@ public class GenericSpecification<T> implements Specification<T> {
 	            		predicates.append(" '" + criteria.getValue().toString() + "' ");	            		                
 
 	            } else if (criteria.getOperation().equals(SearchOperation.MATCH)) {
-	            	predicates.append(predicates.indexOf(" where ") != -1 ? " and " : " where ");
-	            	String key = parseMap.containsKey(criteria.getKey()) ? parseMap.get(criteria.getKey()) : criteria.getKey();
-	            	predicates.append("FUNCTION('unaccent', UPPER(" + key + "))");
-	            	String value = StringUtilLibrary.removerAcentos(criteria.getValue().toString()).toUpperCase().replaceAll(" ", "%");
-	            	predicates.append(" like  ");
-	            	predicates.append("'%" + value + "%'  ");
+	            	 predicates.append(predicates.indexOf(" where ") != -1 ? " and " : " where ");
+	            	    String key = parseMap.containsKey(criteria.getKey()) ? parseMap.get(criteria.getKey()) : criteria.getKey();
+	            	    String field = "UPPER(FUNCTION('unaccent', " + key + "))";
+	            	    String value = StringUtilLibrary.removerAcentos(criteria.getValue().toString()).toUpperCase().replaceAll(" ", "%");
+
+	            	    predicates.append(field)
+	            	              .append(" LIKE ")
+	            	              .append("'%" + value + "%'");
 	            } else if (criteria.getOperation().equals(SearchOperation.MATCH_END)) {
 	            	predicates.append(predicates.indexOf(" where ") != -1 ? " and " : " where ");
 	            	String key = parseMap.containsKey(criteria.getKey()) ? parseMap.get(criteria.getKey()) : criteria.getKey();	            	
@@ -201,7 +203,7 @@ public class GenericSpecification<T> implements Specification<T> {
 	            }
 	           
 	        }
-
+	        System.out.println(predicates.toString());
 	        return predicates.toString();
 	    }
 	 

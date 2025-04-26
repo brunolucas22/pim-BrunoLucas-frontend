@@ -73,18 +73,12 @@ public class LogController implements ServiceMap<LogModel, LogDTO> {
 
 		// return new ResponseListDTO(listDto, totalElements);
 
-		
-
-		
-		
-			
 		requestListDTO.getPageableDTO().getFilters()
 		.add(new PageableFilterDTO("idProject", "" 
 				+ idProject,
 				"EQUAL"));
-			
 		
-
+			
 		Page<LogDTO> listModel = abstractService.getAllView(requestListDTO);
 
 		return new ResponseListDTO<LogDTO>(listModel.getContent(), listModel.getTotalElements());

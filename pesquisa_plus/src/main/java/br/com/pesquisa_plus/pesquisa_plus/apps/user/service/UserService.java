@@ -16,6 +16,8 @@ import org.springframework.core.io.Resource;
 
 
 import java.nio.file.Path;
+
+import br.com.pesquisa_plus.pesquisa_plus.apps.user.dto.UserDTO;
 import br.com.pesquisa_plus.pesquisa_plus.apps.user.models.UserModel;
 import br.com.pesquisa_plus.pesquisa_plus.apps.user.repository.UserRepository;
 import br.com.pesquisa_plus.pesquisa_plus.apps.user.utils.GeneratorPassword;
@@ -176,8 +178,20 @@ public class UserService extends AbstractService<UserModel, Integer> {
        return super.update(userUpdate);
     }
 
-    public Optional<UserModel> selectedByCPF(String cpf) {
+    public UserDTO selectedByCPF(String cpf) {
 
-		return userRepository.findByCpfUser(cpf);
+    	Optional<UserModel> userModel = userRepository.findByCpfUser(cpf);
+		
+		if(userModel.isPresent()) {
+			UserDTO userDTO = new UserDTO();
+			userDTO.setCpfUser(userDTO.getCpfUser());
+			userDTO.setNameUser(userDTO.getNameUser());
+			userDTO.setId(userDTO.getId());
+			userDTO.setEmailUser(userDTO.getEmailUser());
+			return userDTO;
+		}
+		return null;
 	}
+    
+   
 }

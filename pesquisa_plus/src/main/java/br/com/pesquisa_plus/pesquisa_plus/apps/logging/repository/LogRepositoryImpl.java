@@ -52,8 +52,8 @@ public class LogRepositoryImpl implements LogCustomRepository {
 		        "details", "l.details",
 		        "controller", "l.controller",
 		        "idUser", "CAST(l.idUser AS INTEGER)",
-		        "idProject", "CAST(l.idProject AS INTEGER)"
-		        
+		        "idProject", "CAST(l.idProject AS INTEGER)",
+		        "user", "u.nameUser"
 		    );
 
 		    Session session = (Session) entityManager.getDelegate();
@@ -74,7 +74,7 @@ public class LogRepositoryImpl implements LogCustomRepository {
 		    """);
 		    
 		    
-		    where.append(((GenericSpecification) spec).toPredicateJpql(parseMap));
+		    where.append(((GenericSpecification<LogModel>) spec).toPredicateJpql(parseMap));
 		    
 		    if (pageable.getSort().isSorted()) {
 		        Sort.Order order = pageable.getSort().iterator().next();
@@ -82,7 +82,7 @@ public class LogRepositoryImpl implements LogCustomRepository {
 		        String direction = order.getDirection().name();
 
 		        if (property.equals("user")) {
-		            orderBy.append(" ORDER BY u.nameUser ").append(direction); // Ordena por userName
+		            orderBy.append(" ORDER BY u.nameUser ").append(direction);
 		        } else {
 		        	 orderBy.append(" ORDER BY ").append(pageable.getSort().toString().replaceAll(":", ""));
 		        }
