@@ -1,5 +1,7 @@
 package br.com.pesquisa_plus.pesquisa_plus.apps.member_project.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 // Imports
@@ -33,5 +35,11 @@ public class MemberProjectService extends AbstractService<MemberProjectModel, In
 				requestListDTO.parserToPageable(), requestListDTO.getPageableDTO().isReport());
 		
 		return pageLogView;
+	}
+    
+    @SuppressWarnings("unchecked")
+	public Optional<MemberProjectModel> getByProjectAndUser(Long idProject, Long idUser) {
+		return memberProjectRepository.findByIdProjectAndIdUser(idProject, idUser);
+		
 	}
 }

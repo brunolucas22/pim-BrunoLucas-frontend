@@ -33,11 +33,14 @@ public class AuthenticationController {
         try {
             var usernamePassword = new UsernamePasswordAuthenticationToken(body.getEmail(), body.getSenha());
             var auth = authenticationManager.authenticate(usernamePassword);
+            
+            UserModel user = (UserModel) auth.getPrincipal();
 
-            var token = tokenService.generateToken((UserModel) auth.getPrincipal(), 60);
-            var refresh = tokenService.generateToken((UserModel) auth.getPrincipal(), 300000);
+            var token = tokenService.generateToken((UserModel) user, 60);
+            var refresh = tokenService.generateToken((UserModel) user, 300000);
+            
 
-            TokenModel tokenAccess = new TokenModel(token, refresh);
+            TokenModel tokenAccess = new TokenModel(token, refresh,  user.getId(), user.getTypeUser());
 
             return new ResponseEntity<>(tokenAccess, HttpStatus.OK);
         } catch (Exception e) {
@@ -61,7 +64,7 @@ public class AuthenticationController {
         var token = tokenService.generateToken((UserModel) usuario, 30);
         var refresh = tokenService.generateToken((UserModel) usuario, 3600);
 
-        TokenModel tokenAccess = new TokenModel(token, refresh);
+        TokenModel tokenAccess = new TokenModel(token, refresh, usuario.getId(), usuario.getTypeUser());
 
         return new ResponseEntity<TokenModel>(tokenAccess, HttpStatus.OK);
       

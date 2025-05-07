@@ -87,4 +87,24 @@ public class MemberProjectController extends AbstractController<MemberProjectMod
 
 		
 	}
+	
+	@GetMapping("/user/{idUser}")
+	public ResponseEntity<MemberProjectDTO> getMemberUser(@PathVariable("idUser") Long idUser, @PathVariable("idProject") Long idProject) throws IOException {
+		MemberProjectDTO memberProjectDTO = new MemberProjectDTO();
+		
+		Optional<MemberProjectModel> memberProjectModel = memberProjectService.getByProjectAndUser(idProject, idUser);
+		
+		if (memberProjectModel.isEmpty()) {
+        	throw new RequestDataInvalidException("Usuário não encontrado.");
+        }
+		
+		memberProjectDTO.setId(memberProjectModel.get().getId());
+		memberProjectDTO.setIdUser(memberProjectModel.get().getIdUser());
+		memberProjectDTO.setPermissionsMemberProject(memberProjectModel.get().getPermissionsMemberProject());
+	
+		
+	    return ResponseEntity.ok(memberProjectDTO);
+
+		
+	}
 }

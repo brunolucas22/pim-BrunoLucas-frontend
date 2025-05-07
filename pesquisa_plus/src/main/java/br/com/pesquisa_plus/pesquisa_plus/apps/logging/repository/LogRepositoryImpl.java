@@ -58,7 +58,7 @@ public class LogRepositoryImpl implements LogCustomRepository {
 
 		    Session session = (Session) entityManager.getDelegate();
 
-		    sqlCount.append("SELECT COUNT(l) ");
+		    sqlCount.append("SELECT COUNT(DISTINCT l.id) ");
 
 		    select.append("""
 		        SELECT l.id AS id, l.action AS action, l.details AS details, l.dateTime AS dateTime, l.idUser AS idUser,
@@ -100,8 +100,7 @@ public class LogRepositoryImpl implements LogCustomRepository {
 
 		   
 
-		    query.setFirstResult(Long.valueOf(pageable.getOffset()).intValue());
-		    query.setMaxResults(pageable.getPageSize());
+		    
 		    
 		    query = session.createQuery(sql.toString(), LogDTO.class).setTupleTransformer((tuples, aliases) -> {
 		    	 LogDTO dto = new LogDTO();
@@ -116,6 +115,9 @@ public class LogRepositoryImpl implements LogCustomRepository {
 			        dto.setUserCpf((String) tuples[9]);
 			        return dto;
 			});
+		    
+		    query.setFirstResult(Long.valueOf(pageable.getOffset()).intValue());
+		    query.setMaxResults(pageable.getPageSize());
 
 		    Page<LogDTO> page = new PageImpl<LogDTO>(query.getResultList(), pageable, totalRegistros);
 			

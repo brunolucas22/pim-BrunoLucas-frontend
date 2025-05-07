@@ -13,6 +13,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import br.com.pesquisa_plus.pesquisa_plus.apps.member_project.models.MemberProjectModel;
 import br.com.pesquisa_plus.pesquisa_plus.apps.user.models.UserModel;
 import jakarta.mail.Authenticator;
 import jakarta.mail.Message;
@@ -73,8 +74,52 @@ public class EmailService {
         return "";
     }
 
+    public String sendEmailNewMemberProject( MemberProjectModel user, String projectName ) {
+    	Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
+
+        try {
+            MimeMessage mimeMessage = new MimeMessage(session);
+            mimeMessage.setFrom(new InternetAddress(username));
+           // mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmailUser()));
+            mimeMessage.setSubject("Bem Vindo ao Projeto "+ projectName + "!");
+
+            String template = loadTemplateGeneric();
+           // template = template.replace("{{message}}", "Você foi adicionado ao projeto "+projectName+ " como "+use).replace("{{user}}", user.getNameUser()).replace("{{year}}",  "" + LocalDate.now().getYear());
+
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            helper.setText(template, true);
+
+            // Adicionando a imagem inline corretamente
+            ClassPathResource imageResource = new ClassPathResource("assets/logo_black.png");
+            helper.addInline("logoImage", imageResource, "image/png");
+
+            Transport.send(mimeMessage);
+            System.out.println("E-mail enviado com sucesso!");
+
+        } catch (MessagingException | IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+
     public String loadTemplate() throws IOException {
         ClassPathResource resource = new ClassPathResource("created-user.html");
+        return new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+    }
+    
+    public String loadTemplateGeneric() throws IOException {
+        ClassPathResource resource = new ClassPathResource("template-email-generic.html");
         return new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
     }
 }

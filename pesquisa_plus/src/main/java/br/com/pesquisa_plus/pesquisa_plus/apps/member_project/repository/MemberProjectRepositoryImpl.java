@@ -88,9 +88,7 @@ public class MemberProjectRepositoryImpl implements MemberProjectCustomRepositor
 		    	 orderBy.append(" ORDER BY ").append(pageable.getSort().toString().replaceAll(":", ""));
 		    }
 		    
-		    
-		    
-		    
+		   
 		    
 		    Query query = session.createQuery(sqlCount.append(from).append(innerJoin).append(where).toString(), Long.class);
 
@@ -98,8 +96,7 @@ public class MemberProjectRepositoryImpl implements MemberProjectCustomRepositor
 
 		    StringBuilder sql = new StringBuilder().append(select).append(from).append(innerJoin).append(where).append(orderBy);
 
-		    query.setFirstResult(Long.valueOf(pageable.getOffset()).intValue());
-		    query.setMaxResults(pageable.getPageSize());
+		    
 		    
 		    query = session.createQuery(sql.toString(), MemberProjectView.class).setTupleTransformer((tuples, aliases) -> {
 		    	 MemberProjectView dto = new MemberProjectView();
@@ -113,6 +110,9 @@ public class MemberProjectRepositoryImpl implements MemberProjectCustomRepositor
 			        dto.setIdUser(tuples[7] != null ? (Long) tuples[7] : null);
 			        return dto;
 			});
+		    
+		    query.setFirstResult(Long.valueOf(pageable.getOffset()).intValue());
+		    query.setMaxResults(pageable.getPageSize());
 
 		    Page<MemberProjectView> page = new PageImpl<MemberProjectView>(query.getResultList(), pageable, totalRegistros);
 			

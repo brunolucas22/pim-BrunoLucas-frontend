@@ -178,19 +178,11 @@ public class UserService extends AbstractService<UserModel, Integer> {
        return super.update(userUpdate);
     }
 
-    public UserDTO selectedByCPF(String cpf) {
+    public Optional<UserModel> selectedByCPF(String cpf) {
 
-    	Optional<UserModel> userModel = userRepository.findByCpfUser(cpf);
+    	return userRepository.findByCpfUser(cpf);
 		
-		if(userModel.isPresent()) {
-			UserDTO userDTO = new UserDTO();
-			userDTO.setCpfUser(userDTO.getCpfUser());
-			userDTO.setNameUser(userDTO.getNameUser());
-			userDTO.setId(userDTO.getId());
-			userDTO.setEmailUser(userDTO.getEmailUser());
-			return userDTO;
-		}
-		return null;
+	
 	}
     
    
