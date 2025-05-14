@@ -184,6 +184,32 @@ public class UserService extends AbstractService<UserModel, Integer> {
 		
 	
 	}
+
+    @Override
+	@Transactional
+	public void deleteByID(Integer id) {
+	    Optional<UserModel> userModel = userRepository.findById(id);
+	    
+	    if (userModel.isEmpty()) {
+	        throw new RequestDataInvalidException("Usuário não encontrado.");
+	    }
+	
+	    UserModel user = userModel.get();
+	
+	    // Deleta a foto se existir
+	    if (user.getPhotoUser() != null) {
+	        try {
+	            Path photoPath = Paths.get(user.getPhotoUser());
+	            Files.deleteIfExists(photoPath);
+	        } catch (IOException e) {
+	            // Você pode logar isso ou apenas seguir com a exclusão
+	            System.err.println("Erro ao deletar a foto do usuário: " + e.getMessage());
+	        }
+	    }
+	
+	    // Deleta o usuário do banco
+	    super.deleteByID(id);
+	}
     
    
 }
