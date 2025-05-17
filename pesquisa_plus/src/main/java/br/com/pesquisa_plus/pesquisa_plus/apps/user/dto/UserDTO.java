@@ -65,5 +65,6 @@ public class UserDTO {
 
     private Integer statusUser;
 
-   
+    private String complementaryDataUser;
+    
 }

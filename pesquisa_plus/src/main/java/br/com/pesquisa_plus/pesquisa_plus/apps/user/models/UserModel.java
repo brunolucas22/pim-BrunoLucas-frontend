@@ -70,6 +70,10 @@ public class UserModel implements UserDetails, Cloneable, Serializable {
     @JsonProperty("status_user")
     private Integer statusUser;
     
+    @Column(name = "complementary_data_user", columnDefinition = "text", nullable =  true) 
+    @JsonProperty("complementary_data_user")
+    private String complementaryDataUser;
+    
 
 	public Long getId() {
 		return id;
@@ -142,6 +146,14 @@ public class UserModel implements UserDetails, Cloneable, Serializable {
 
 	public void setStatusUser(Integer statusUser) {
 		this.statusUser = statusUser;
+	}
+	
+	public String getComplementaryDataUser() {
+		return complementaryDataUser;
+	}
+
+	public void setComplementaryDataUser(String complementaryDataUser) {
+		this.complementaryDataUser = complementaryDataUser;
 	}
 
     @Override

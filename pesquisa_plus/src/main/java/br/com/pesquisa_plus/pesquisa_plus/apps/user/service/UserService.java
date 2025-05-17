@@ -174,8 +174,31 @@ public class UserService extends AbstractService<UserModel, Integer> {
         userUpdate.setStatusUser(user.getStatusUser());
         userUpdate.setTypeUser(user.getTypeUser());
         userUpdate.setPhotoUser(user.getPhotoUser());
+        userUpdate.setComplementaryDataUser(user.getComplementaryDataUser());
+        if (user.getPasswordUser() != null && !user.getPasswordUser().trim().isEmpty()) {
+            
+        	System.out.println("isso é masterchaf");
+        	userUpdate.setPasswordUser(passwordEncoder.encode(user.getPasswordUser()));}
         
        return super.update(userUpdate);
+    }
+    
+    @Transactional
+    public String updatePassword( Long id, String password) {
+    	
+
+    	
+		
+		Optional<UserModel> userModel = userRepository.findById(id);
+        if (userModel.isEmpty()) {
+        	throw new RequestDataInvalidException("Usuário não encontrado.");
+        }
+        System.out.println(password);
+       userModel.get().setPasswordUser(passwordEncoder.encode(password.replace("\"", "")));
+        
+       System.out.println(userModel.get().getPasswordUser());
+       super.update(userModel.get());
+       return "";
     }
 
     public Optional<UserModel> selectedByCPF(String cpf) {

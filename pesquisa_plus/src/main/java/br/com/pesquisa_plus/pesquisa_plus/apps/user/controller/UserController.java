@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import br.com.pesquisa_plus.pesquisa_plus.shared.controller.AbstractController;
 import br.com.pesquisa_plus.pesquisa_plus.shared.dto.ListPageableDTO;
 import br.com.pesquisa_plus.pesquisa_plus.shared.dto.PageableDTO;
-
+import jakarta.transaction.Transactional;
 import br.com.pesquisa_plus.pesquisa_plus.apps.user.dto.UserDTO;
 import br.com.pesquisa_plus.pesquisa_plus.apps.user.models.UserModel;
 import br.com.pesquisa_plus.pesquisa_plus.apps.user.repository.UserRepository;
@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,6 +57,12 @@ public class UserController extends AbstractController<UserModel, UserDTO, Integ
 		}
 		return null;
 	}
+	
+
+	@PutMapping("/updatepassword/{id}")
+    public String uploadPhoto(@PathVariable("id") Long id, @RequestBody String password) throws IOException {
+        return userService.updatePassword(id, password);
+    }
 	
 
 }

@@ -1,13 +1,21 @@
 package br.com.pesquisa_plus.pesquisa_plus.apps.project.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 // Imports
 import org.springframework.stereotype.Service;
+
+import br.com.pesquisa_plus.pesquisa_plus.apps.member_project.models.MemberProjectModel;
+import br.com.pesquisa_plus.pesquisa_plus.apps.member_project.service.MemberProjectService;
 import br.com.pesquisa_plus.pesquisa_plus.apps.project.models.ProjectModel;
 import br.com.pesquisa_plus.pesquisa_plus.shared.service.AbstractService;
-
+import br.com.pesquisa_plus.pesquisa_plus.utils.AuthUtil;
 import br.com.pesquisa_plus.pesquisa_plus.apps.project.repository.ProjectRepository;
 
 import br.com.pesquisa_plus.pesquisa_plus.shared.exception.RequestDataInvalidException;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 // Annotations for the service
@@ -18,6 +26,12 @@ public class ProjectService extends AbstractService<ProjectModel, Integer> {
     // Add dependencies
   
     private ProjectRepository projectRepository;
+    
+    @Autowired
+    private MemberProjectService memberProjectService;
+    
+    @Autowired
+    static AuthUtil authUtil;
     // @Autowired
     // private ProjectPageRepository projectPageRepository;
     // private final Validator validator;
@@ -41,7 +55,20 @@ public class ProjectService extends AbstractService<ProjectModel, Integer> {
         project.setExpectedFinalDateProject(project.getStartDateProject().plusMonths(project.getDurationProject()));
         
    
-        return super.create(project);
+        ProjectModel projectCreated = super.create(project);
+        
+        MemberProjectModel member = new MemberProjectModel();
+        
+        member.setIdSupervisor(Long.parseLong(""+0));
+        member.setIdProject(projectCreated.getId());
+        member.setPermissionsMemberProject(generatedPermissions(17));
+        member.setRoleMemberProject("Criador do Projeto");
+        member.setScholarshipMemberProject(BigDecimal.valueOf(0));
+        member.setIdUser(authUtil.getIdUsuarioLogado());
+        
+        memberProjectService.create(member);
+        
+        return projectCreated;
     }
     
     @Override
@@ -59,6 +86,14 @@ public class ProjectService extends AbstractService<ProjectModel, Integer> {
 		project.setExpectedFinalDateProject(project.getStartDateProject().plusMonths(project.getDurationProject()));
 		
 		return super.update(project);
+    }
+    
+    public static Integer[] generatedPermissions(int lastPermission) {
+        Integer[] numbers = new Integer[lastPermission];
+        for (int i = 0; i < lastPermission; i++) {
+        	numbers[i] = i + 1;
+        }
+        return numbers;
     }
 
 }
