@@ -43,11 +43,13 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/token-auth/").permitAll()
                         .requestMatchers(HttpMethod.POST, "/token-refresh/").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/useranonymous/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/useranonymous/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .and()
-                .build();
+                .cors().and().build();
     }
 
     @Bean

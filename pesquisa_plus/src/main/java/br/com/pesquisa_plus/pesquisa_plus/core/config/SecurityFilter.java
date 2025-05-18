@@ -27,7 +27,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     private UserRepository userRepository;
 
-    private static final List<String> EXCLUDED_URLS = Arrays.asList("/token-auth/", "/token-refresh/", "/usuario/cadastrar/");
+    private static final List<String> EXCLUDED_URLS = Arrays.asList("/token-auth/", "/token-refresh/", "/useranonymous");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -36,7 +36,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         String requestPath = request.getRequestURI();
 
         // Verifica se a URL atual está na lista de URLs excluídas
-        if (EXCLUDED_URLS.contains(requestPath)) {
+        if (EXCLUDED_URLS.stream().anyMatch(requestPath::startsWith)) {
             filterChain.doFilter(request, response);
             return;
         }

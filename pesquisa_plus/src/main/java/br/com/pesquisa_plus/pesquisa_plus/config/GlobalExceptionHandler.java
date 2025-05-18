@@ -201,7 +201,7 @@ public class GlobalExceptionHandler {
 	// }
 	
 	
-	private ResponseErrorDTO getErrorDTO(String msg, String type, String details, HttpStatus httpStatus) {
+	private ResponseErrorDTO getErrorDTO(String details, String type, String msg, HttpStatus httpStatus) {
 		
 		return new ResponseErrorDTO(httpStatus.value(), type,  new Date(), msg, details);
 	}

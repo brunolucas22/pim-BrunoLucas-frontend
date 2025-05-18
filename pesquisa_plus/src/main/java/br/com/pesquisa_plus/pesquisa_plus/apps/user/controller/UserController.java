@@ -63,6 +63,9 @@ public class UserController extends AbstractController<UserModel, UserDTO, Integ
     public String uploadPhoto(@PathVariable("id") Long id, @RequestBody String password) throws IOException {
         return userService.updatePassword(id, password);
     }
-	
 
+	@PutMapping("/forgotpassword/{cpf:.+}")
+	public String forgotPassword(@PathVariable("cpf") String cpf) throws IOException {
+		return userService.forgotPassword(cpf);
+	}
 }

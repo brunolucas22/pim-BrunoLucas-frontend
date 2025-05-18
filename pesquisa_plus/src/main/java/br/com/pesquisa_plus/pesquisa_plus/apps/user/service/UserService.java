@@ -185,18 +185,12 @@ public class UserService extends AbstractService<UserModel, Integer> {
     
     @Transactional
     public String updatePassword( Long id, String password) {
-    	
-
-    	
 		
 		Optional<UserModel> userModel = userRepository.findById(id);
         if (userModel.isEmpty()) {
         	throw new RequestDataInvalidException("Usuário não encontrado.");
         }
-        System.out.println(password);
        userModel.get().setPasswordUser(passwordEncoder.encode(password.replace("\"", "")));
-        
-       System.out.println(userModel.get().getPasswordUser());
        super.update(userModel.get());
        return "";
     }
@@ -233,6 +227,27 @@ public class UserService extends AbstractService<UserModel, Integer> {
 	    // Deleta o usuário do banco
 	    super.deleteByID(id);
 	}
-    
+
+    @Transactional
+    // Method that registers the user in the system
+    public String forgotPassword(String cpf) {
+
+        Optional<UserModel> userModelByCpf = userRepository.findByCpfUser(cpf);
+
+
+        if (userModelByCpf.isEmpty()) {
+            throw new RequestDataInvalidException("Usuário não encontrado.");
+        }
+
+        String password = GeneratorPassword.generate(8);
+        userModelByCpf.get().setPasswordUser(passwordEncoder.encode(password));
+
+        emailService.sendEmailForgotPassword(password, userModelByCpf.get());
+
+
+        super.update(userModelByCpf.get());
+
+        return "";
+    }
    
 }

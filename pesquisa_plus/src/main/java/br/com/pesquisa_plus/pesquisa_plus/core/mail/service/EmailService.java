@@ -113,8 +113,53 @@ public class EmailService {
     }
 
 
+    public String sendEmailForgotPassword( String message, UserModel user ) {
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
+
+        try {
+            MimeMessage mimeMessage = new MimeMessage(session);
+            mimeMessage.setFrom(new InternetAddress(username));
+            mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmailUser()));
+            mimeMessage.setSubject("Sua nova senha do Pesquisa Plus foi gerada!");
+
+            String template = loadTemplateForgot();
+            template = template.replace("{{message}}", message).replace("{{user}}", user.getNameUser()).replace("{{year}}",  "" + LocalDate.now().getYear());
+
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            helper.setText(template, true);
+
+            // Adicionando a imagem inline corretamente
+            ClassPathResource imageResource = new ClassPathResource("assets/logo_black.png");
+            helper.addInline("logoImage", imageResource, "image/png");
+
+            Transport.send(mimeMessage);
+            System.out.println("E-mail enviado com sucesso!");
+
+        } catch (MessagingException | IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+
+
     public String loadTemplate() throws IOException {
         ClassPathResource resource = new ClassPathResource("created-user.html");
+        return new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+    }
+
+    public String loadTemplateForgot() throws IOException {
+        ClassPathResource resource = new ClassPathResource("forgot-password-email.html");
         return new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
     }
     
