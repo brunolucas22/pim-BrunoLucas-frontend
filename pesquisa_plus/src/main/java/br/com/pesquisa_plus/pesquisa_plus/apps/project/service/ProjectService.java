@@ -1,7 +1,12 @@
 package br.com.pesquisa_plus.pesquisa_plus.apps.project.service;
 
+import br.com.pesquisa_plus.pesquisa_plus.apps.logging.dto.LogDTO;
+import br.com.pesquisa_plus.pesquisa_plus.apps.project.dto.ProjectDTO;
+import br.com.pesquisa_plus.pesquisa_plus.shared.dto.RequestListDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 // Imports
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import br.com.pesquisa_plus.pesquisa_plus.apps.member_project.models.MemberProjectModel;
@@ -13,6 +18,7 @@ import br.com.pesquisa_plus.pesquisa_plus.apps.project.repository.ProjectReposit
 
 import br.com.pesquisa_plus.pesquisa_plus.shared.exception.RequestDataInvalidException;
 
+import java.awt.print.Pageable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +48,16 @@ public class ProjectService extends AbstractService<ProjectModel, Integer> {
         this.projectRepository = projectRepository;
     }
 
-    
+
+    public Page<ProjectDTO> getAllView(RequestListDTO requestListDTO) {
+
+        Page<ProjectDTO> pageLogView = projectRepository.listView(requestListDTO.parserToCriteria(),
+                requestListDTO.parserToPageable(), requestListDTO.getPageableDTO().isReport());
+
+        return pageLogView;
+    }
+
+
     @Override
     public ProjectModel create(ProjectModel project) {
     	

@@ -57,7 +57,7 @@ public class ResourcesModel implements Cloneable, Serializable {
     // Data de aquisição do recurso
     @Column(name = "aquisition_date_resources", nullable = false)
     @JsonProperty("aquisition_date_resources")
-    private LocalDate aquisitionDateResourses;
+    private LocalDate aquisitionDateResources;
 
     // Status do recurso (ativo, inativo, em uso, etc.)
     @Column(name = "status_resources", nullable = false)
@@ -114,12 +114,12 @@ public class ResourcesModel implements Cloneable, Serializable {
         this.estimatedValueResources = estimatedValueResources;
     }
 
-    public LocalDate getAquisitionDateResourses() {
-        return aquisitionDateResourses;
+    public LocalDate getAquisitionDateResources() {
+        return aquisitionDateResources;
     }
 
-    public void setAquisitionDateResourses(LocalDate aquisitionDateResourses) {
-        this.aquisitionDateResourses = aquisitionDateResourses;
+    public void setAquisitionDateResources(LocalDate aquisitionDateResources) {
+        this.aquisitionDateResources = aquisitionDateResources;
     }
 
     public String getStatusResources() {

@@ -59,7 +59,7 @@ public class ResourcesDTO {
 
     // Start Date of Resources
     @NotNull(message = "Data de aquisição do recurso é obrigatório!")
-    private LocalDate aquisitionDateResourses;
+    private LocalDate aquisitionDateResources;
 
     @NotBlank(message="Status do recurso é obrigatório!")
     private String statusResources;

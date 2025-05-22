@@ -12,4 +12,12 @@ public class AuthUtil {
         }
         return null;
     }
+
+    public static UserModel getUsuarioLogado() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserModel) {
+            return ((UserModel) principal);
+        }
+        return null;
+    }
 }

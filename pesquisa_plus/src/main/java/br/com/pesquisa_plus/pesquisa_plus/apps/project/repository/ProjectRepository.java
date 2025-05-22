@@ -14,9 +14,12 @@ import br.com.pesquisa_plus.pesquisa_plus.shared.repository.BaseJpaRepository;
 // Annotations for the repository
 @Repository
 // Database access interface
-public interface ProjectRepository extends BaseJpaRepository<ProjectModel, Integer> {
+public interface ProjectRepository extends BaseJpaRepository<ProjectModel, Integer>,ProjectCustomRepository  {
 
     // FindAll returns
-    Optional<ProjectModel> findByNameProject(String nameProject);
+  Optional<ProjectModel> findByNameProject(String nameProject);
+
+
+
 
 }

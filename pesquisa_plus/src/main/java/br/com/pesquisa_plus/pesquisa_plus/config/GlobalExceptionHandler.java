@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
 		ex.printStackTrace();
 		List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(FieldError::getDefaultMessage)
 				.collect(Collectors.toList()); 
-		return new ResponseEntity<ResponseErrorDTO>(getErrorDTO(errors.get(0), ex.getClass().getSimpleName(),ex.getMessage(), HttpStatus.BAD_REQUEST), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<ResponseErrorDTO>(getErrorDTO(ex.getMessage(), ex.getClass().getSimpleName(),errors.get(0), HttpStatus.BAD_REQUEST), new HttpHeaders(), HttpStatus.BAD_REQUEST);
 	}
 
 	// @ExceptionHandler(RequestDataInvalidException.class)

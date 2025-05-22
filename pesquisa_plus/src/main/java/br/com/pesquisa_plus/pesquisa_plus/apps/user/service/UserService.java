@@ -118,19 +118,22 @@ public class UserService extends AbstractService<UserModel, Integer> {
     public ResponseEntity<String> getPhoto(Long id) throws IOException{
     	Optional<UserModel> userModel = userRepository.findById(id);
         if (userModel.isEmpty()) {
-        	throw new RequestDataInvalidException("Usuário não encontrado.");
+            return ResponseEntity.ok("");
+        }
+        if(userModel.get().getPhotoUser() == null) {
+            return ResponseEntity.ok("");
         }
 
 	    Path path = Paths.get(userModel.get().getPhotoUser());
 	    if (!Files.exists(path)) {
-	    	throw new RequestDataInvalidException("Foto não encontrada.");
+            return ResponseEntity.ok("");
 	    }
 
 	    try {
 	        String base64Image = getImageAsBase64(userModel.get().getPhotoUser());
 	        return ResponseEntity.ok(base64Image);
 	    } catch (IOException e) {
-	    	throw new RequestDataInvalidException("Foto não encontrada.");
+	    	return ResponseEntity.ok("");
 	    }
     }
     

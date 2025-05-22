@@ -1,27 +1,22 @@
 package br.com.pesquisa_plus.pesquisa_plus.apps.project.models;
 
-import java.io.Serializable;
-// Imports
-import java.math.BigDecimal;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.hibernate.annotations.Immutable;
+import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import org.springframework.stereotype.Component;
-
 // Annotations for the model
 @Entity
-@Table(name = "project")
+@Table(name = "project_with_status")
 @Component
+@Immutable
 // Class model for the Project entity
-public class ProjectModel implements Cloneable, Serializable {
+public class ProjectStatusModel implements Cloneable, Serializable {
 
     // ID of Project ( Primary Key )
     @Id
@@ -67,6 +62,9 @@ public class ProjectModel implements Cloneable, Serializable {
 	@JsonProperty("status_manual_project")
 	private String statusManualProject;
 
+	@Column(name = "status_project", length = 255, nullable = true, unique = false)
+	@JsonProperty("status_project")
+	private String statusProject;
 
 	public Long getId() {
 		return id;
@@ -140,6 +138,14 @@ public class ProjectModel implements Cloneable, Serializable {
 		this.statusManualProject = statusManualProject;
 	}
 
+	public String getStatusProject() {
+		return statusProject;
+	}
+
+	public void setStatusProject(String statusProject) {
+		this.statusProject = statusProject;
+	}
+
 
 
 	@Override
@@ -155,7 +161,7 @@ public class ProjectModel implements Cloneable, Serializable {
 			return false;
 	    if (getClass() != obj.getClass())
 			return false;
-	    ProjectModel other = (ProjectModel) obj;
+	    ProjectStatusModel other = (ProjectStatusModel) obj;
 	    if (id != other.id)
 			return false;
 	    return true;

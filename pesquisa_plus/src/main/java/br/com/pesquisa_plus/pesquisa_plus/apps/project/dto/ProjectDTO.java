@@ -61,6 +61,10 @@ public class ProjectDTO {
     private LocalDate finalDateProject;
     
     private LocalDate expectedFinalDateProject;
+
+    private String statusProject;
+
+    private String statusManualProject;
 }
 
 

@@ -1,6 +1,10 @@
 package br.com.pesquisa_plus.pesquisa_plus.apps.project.controller;
 
 // Imports
+import br.com.pesquisa_plus.pesquisa_plus.apps.logging.dto.LogDTO;
+import br.com.pesquisa_plus.pesquisa_plus.apps.project.service.ProjectService;
+import br.com.pesquisa_plus.pesquisa_plus.shared.dto.PageableFilterDTO;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.pesquisa_plus.pesquisa_plus.apps.project.dto.ProjectDTO;
@@ -28,8 +32,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/project")
 // User access interface
 public class ProjectController extends AbstractController<ProjectModel, ProjectDTO, Integer> {
-	public ProjectController(ProjectModel projectModel, ProjectDTO projectDTO) {
+	private final ProjectService projectService;
+
+	public ProjectController(ProjectModel projectModel, ProjectDTO projectDTO, ProjectService projectService) {
 		super(projectModel, projectDTO);
+		this.projectService = projectService;
 	}
-	
+	@PostMapping(value = "/listprojects")
+	public ResponseListDTO list(@RequestBody @Valid RequestListDTO requestListDTO) {
+
+
+		Page<ProjectDTO> listModel = projectService.getAllView(requestListDTO);
+
+		return new ResponseListDTO<ProjectDTO>(listModel.getContent(), listModel.getTotalElements());
+	}
 }
